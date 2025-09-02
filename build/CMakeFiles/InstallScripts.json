@@ -1,0 +1,12 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/giuli/OneDrive/Documentos/Comp-Graf/build/cmake_install.cmake",
+		"C:/Users/giuli/OneDrive/Documentos/Comp-Graf/build/src/cmake_install.cmake",
+		"C:/Users/giuli/OneDrive/Documentos/Comp-Graf/build/external/cmake_install.cmake",
+		"C:/Users/giuli/OneDrive/Documentos/Comp-Graf/build/external/glad/cmake_install.cmake",
+		"C:/Users/giuli/OneDrive/Documentos/Comp-Graf/build/external/glfw/cmake_install.cmake",
+		"C:/Users/giuli/OneDrive/Documentos/Comp-Graf/build/external/glfw/src/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

@@ -3,7 +3,7 @@
 #ifdef _WIN32
 
 #define GLAD_GL_IMPLEMENTATION // Necessary for headeronly version.
-#include <glad/gl.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #elif __APPLE__
@@ -86,6 +86,7 @@ int main()
  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);     // required for mac os
+ 
 #if __APPLE__
  glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_TRUE);  // option for mac os
 #endif
@@ -97,12 +98,10 @@ int main()
   }
  glfwMakeContextCurrent(win);
 
-#ifdef GLAD_GL_H_
-  if (!gladLoadGL(glfwGetProcAddress)) {
-    printf("Failed to initialize GLAD OpenGL context\n");
-    exit(1);
-   }
-#endif
+if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    std::cerr << "Failed to initialize GLAD" << std::endl;
+    return -1;
+}
 
  std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
