@@ -1,5 +1,6 @@
 set(GLAD_ROOT_DIR      ${CMAKE_CURRENT_SOURCE_DIR}/glad      CACHE STRING "glad root directory")
 set(GLFW_ROOT_DIR      ${CMAKE_CURRENT_SOURCE_DIR}/glfw      CACHE STRING "GLFW root directory")
+set(GLM_ROOT_DIR      ${CMAKE_CURRENT_SOURCE_DIR}/glm      CACHE STRING "GLFW root directory")
 
 # All
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Building dependencies as static libraries" FORCE)
@@ -13,3 +14,4 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(${GLAD_ROOT_DIR})
 add_subdirectory(${GLFW_ROOT_DIR})
+add_subdirectory(${GLM_ROOT_DIR})
