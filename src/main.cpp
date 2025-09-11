@@ -17,11 +17,12 @@
 #include "error.h"
 #include "triangle.h"
 #include "shader.h"
+#include "polygon.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-static TrianglePtr tri;
+static PolygonPtr poly;
 static ShaderPtr shd;
 
 static void error (int code, const char* msg)
@@ -45,7 +46,7 @@ static void resize (GLFWwindow* win, int width, int height)
 static void initialize ()
 {
   glClearColor(1.0f,1.0f,1.0f,1.0f);
-  tri = Triangle::Make();
+  poly = Polygon::Make();
   shd = Shader::Make();
   shd->AttachVertexShader("shaders/vertex.glsl");
   shd->AttachFragmentShader("shaders/fragment.glsl");
@@ -57,7 +58,7 @@ static void display (GLFWwindow* win)
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   shd->UseProgram();
-  tri->Draw();
+  poly->Draw();
   Error::Check("display");
 }
 
@@ -72,7 +73,7 @@ int main ()
 
   glfwSetErrorCallback(error);
 
-  GLFWwindow* win = glfwCreateWindow(600,400,"Triangle test",nullptr,nullptr);
+  GLFWwindow* win = glfwCreateWindow(600,400,"Polygon test",nullptr,nullptr);
   glfwSetFramebufferSizeCallback(win, resize);  // resize callback
   glfwSetKeyCallback(win, keyboard);            // keyboard callback
   
