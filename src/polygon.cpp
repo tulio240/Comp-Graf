@@ -8,27 +8,29 @@
 #include <OpenGL/gl3.h>
 #endif
 
-PolygonPtr Polygon::Make(){
-    return PolygonPtr(new Polygon());
+PoligonalPtr Poligonal::Make(){
+    return PoligonalPtr(new Poligonal());
 }
 
-Polygon::Polygon(){
+Poligonal::Poligonal(){
     float coords[] = {
-        0.5f, -0.3f, //a
-        -0.5f, -0.4f, //b
-        0.0f, 0.3f, //c
-        0.6f, 0.6f, //d
-        0.7f, -0.3f, //e     
+        -0.7f, 0.4f, //a
+        0.0f, 0.3f, //b
+        0.6f, 0.6f, //c
+        0.5f, -0.3f, //d
+        -0.5f, -0.4f, //e     
     };
 
     int indexes[] = {
-        1, 0, 4, 3, 2
+        0, 1, 4,
+        4, 1, 3,
+        3, 2, 1
     };
 
     unsigned char color[] = {
         255, 0, 0,
-        0, 255, 0,
         0, 0, 255,
+        0, 255, 0,
         255, 255, 0,
         0, 255, 255
     };
@@ -58,12 +60,12 @@ Polygon::Polygon(){
 
 }
 
-Polygon::~Polygon () 
+Poligonal::~Poligonal () 
 {
 }
 
-void Polygon::Draw ()
+void Poligonal::Draw ()
 {
   glBindVertexArray(m_vao);
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+  glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 }

@@ -1,21 +1,21 @@
 #include <memory>
-class Polygon;
-using PolygonPtr = std::shared_ptr<Polygon>;
+class Poligonal;
+using PoligonalPtr = std::shared_ptr<Poligonal>;
 
 #ifndef POLYGON_H
 #define POLYGON_H
 
 #include "shape.h"
 
-class Polygon : public Shape{
+class Poligonal : public Shape{
     unsigned int m_vao;
     unsigned int m_ebo;
 protected:
-    Polygon ();
+    Poligonal ();
 
 public:
-    static PolygonPtr Make ();
-    virtual ~Polygon ();
+    static PoligonalPtr Make ();
+    virtual ~Poligonal ();
     virtual void Draw ();
 };
 

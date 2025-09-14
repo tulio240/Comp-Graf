@@ -15,14 +15,13 @@
 
 
 #include "error.h"
-#include "triangle.h"
 #include "shader.h"
 #include "polygon.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-static PolygonPtr poly;
+static PoligonalPtr poly;
 static ShaderPtr shd;
 
 static void error (int code, const char* msg)
@@ -46,7 +45,7 @@ static void resize (GLFWwindow* win, int width, int height)
 static void initialize ()
 {
   glClearColor(1.0f,1.0f,1.0f,1.0f);
-  poly = Polygon::Make();
+  poly = Poligonal::Make();
   shd = Shader::Make();
   shd->AttachVertexShader("shaders/vertex.glsl");
   shd->AttachFragmentShader("shaders/fragment.glsl");
