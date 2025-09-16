@@ -16,12 +16,12 @@
 
 #include "error.h"
 #include "shader.h"
-#include "polygon.h"
+#include "circle.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-static PoligonalPtr poly;
+static CirclePtr poly;
 static ShaderPtr shd;
 
 static void error (int code, const char* msg)
@@ -45,7 +45,7 @@ static void resize (GLFWwindow* win, int width, int height)
 static void initialize ()
 {
   glClearColor(1.0f,1.0f,1.0f,1.0f);
-  poly = Poligonal::Make();
+  poly = Circle::Make();
   shd = Shader::Make();
   shd->AttachVertexShader("shaders/vertex.glsl");
   shd->AttachFragmentShader("shaders/fragment.glsl");
