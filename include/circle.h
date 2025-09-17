@@ -10,11 +10,12 @@ using CirclePtr = std::shared_ptr<Circle>;
 class Circle : public Shape{
     unsigned int m_vao;
     unsigned int m_ebo;
+    unsigned int num_points;
 protected:
-    Circle ();
+    Circle (int num_points);
 
 public:
-    static CirclePtr Make ();
+    static CirclePtr Make (int num_points);
     virtual ~Circle ();
     virtual void Draw ();
 };

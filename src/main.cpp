@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static CirclePtr poly;
+static CirclePtr relogio;
 static ShaderPtr shd;
 
 static void error (int code, const char* msg)
@@ -44,12 +44,16 @@ static void resize (GLFWwindow* win, int width, int height)
 
 static void initialize ()
 {
-  glClearColor(1.0f,1.0f,1.0f,1.0f);
-  poly = Circle::Make();
+  
+
+  glClearColor(0.0f,1.0f,1.0f,1.0f);
+  relogio = Circle::Make(60);
   shd = Shader::Make();
+  
   shd->AttachVertexShader("shaders/vertex.glsl");
   shd->AttachFragmentShader("shaders/fragment.glsl");
   shd->Link();
+
   Error::Check("initialize");
 }
 
@@ -57,7 +61,11 @@ static void display (GLFWwindow* win)
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   shd->UseProgram();
-  poly->Draw();
+
+  glm::vec4 color = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
+  shd->SetUniform("icolor", color);
+
+  relogio->Draw();
   Error::Check("display");
 }
 
@@ -72,7 +80,7 @@ int main ()
 
   glfwSetErrorCallback(error);
 
-  GLFWwindow* win = glfwCreateWindow(600,400,"Polygon test",nullptr,nullptr);
+  GLFWwindow* win = glfwCreateWindow(400,400,"Clock",nullptr,nullptr);
   glfwSetFramebufferSizeCallback(win, resize);  // resize callback
   glfwSetKeyCallback(win, keyboard);            // keyboard callback
   
