@@ -22,13 +22,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <glm/ext/matrix_transform.hpp>
+#include <chrono>
+#include <ctime>
 
-static CirclePtr relogio;
+#include <iostream>
+
+static CirclePtr _clock;
 static ShaderPtr shd;
-static PonteiroPtr ponteiro;
+static PonteiroPtr hour_pointer;
+static PonteiroPtr minutes_pointer;
+static PonteiroPtr seconds_pointer;
 
-static glm::vec4 relogio_color;
-static glm::vec4 ponteiro_color;
+static glm::vec4 clock_color;
+static glm::vec4 hour_color;
+static glm::vec4 seconds_color;
+
+glm::mat4 hour_M;
+glm::mat4 minutes_M;
+glm::mat4 seconds_M;
 
 static void error (int code, const char* msg)
 {
@@ -48,16 +59,52 @@ static void resize (GLFWwindow* win, int width, int height)
   glViewport(0,0,width,height);
 }
 
+void get_current_time(int& hour, int& minutes, int& seconds){
+  std::chrono::system_clock::time_point now_tp = std::chrono::system_clock::now(); //get current time
+
+  std::time_t now_c_time = std::chrono::system_clock::to_time_t(now_tp); //convert time to time_t
+
+  std::tm* local_time = std::localtime(&now_c_time);
+
+  hour = local_time->tm_hour;
+  minutes = local_time->tm_min;
+  seconds = local_time->tm_sec;
+}
+
 static void initialize ()
 {
-  relogio_color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-  ponteiro_color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+  clock_color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+  hour_color = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+  seconds_color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+
+  int h, m, s;
+  get_current_time(h, m, s);
+
+  float s_r = s * 6.0f;
+  float m_r = m * 6.0f + s_r/60;
+  float h_r = h%12 * 30 + m_r/60 + s_r/3600;
+
+  hour_M = glm::mat4(0.1f);
+  hour_M = glm::scale(hour_M, glm::vec3(1.0f, 1.8f, 1.0f));
+  hour_M = glm::rotate(hour_M, glm::radians(h_r), glm::vec3(0,0,-1));
+
+  minutes_M = glm::mat4(0.1f);
+  minutes_M = glm::scale(minutes_M, glm::vec3(0.8f, 1.0f, 1.0f));
+  minutes_M = glm::rotate(minutes_M, glm::radians(m_r), glm::vec3(0,0,-1));
+
+  seconds_M = glm::mat4(0.1f);
+  seconds_M = glm::scale(seconds_M, glm::vec3(0.3f, 1.0f, 1.0f));
+  seconds_M = glm::rotate(seconds_M, glm::radians(s_r), glm::vec3(0,0,-1));
 
   glClearColor(0.0f,1.0f,1.0f,0.6f);
-  relogio = Circle::Make(60);
-  ponteiro = Ponteiro::Make();
+
+  _clock = Circle::Make(60);
+
+  hour_pointer = Ponteiro::Make();
+  minutes_pointer = Ponteiro::Make();
+  seconds_pointer = Ponteiro::Make();
+
   shd = Shader::Make();
-  
   shd->AttachVertexShader("shaders/vertex.glsl");
   shd->AttachFragmentShader("shaders/fragment.glsl");
   shd->Link();
@@ -72,21 +119,35 @@ static void display (GLFWwindow* win)
 
   glm::mat4 matrix(1.0f);
 
-  glm::mat4 M(1.0f);
-  M = glm::rotate(M, glm::radians(60.0f), glm::vec3(0, 0, 1));
-
-  shd->SetUniform("icolor", {relogio_color});
+  shd->SetUniform("icolor", {clock_color});
   shd->SetUniform("M", matrix);
 
-  relogio->Draw();
+  _clock->Draw();
 
-  shd->SetUniform("icolor", {ponteiro_color});
-  
-  shd->SetUniform("M", M);
+  shd->SetUniform("icolor", {hour_color});
+  shd->SetUniform("M", hour_M);
+  hour_pointer->Draw();
 
-  ponteiro->Draw();
+  shd->SetUniform("icolor", {hour_color});
+  shd->SetUniform("M", minutes_M);
+  minutes_pointer->Draw();
+
+  shd->SetUniform("icolor", {seconds_color});
+  shd->SetUniform("M", seconds_M);
+  seconds_pointer->Draw();
 
   Error::Check("display");
+}
+
+void update (float dt){
+
+  float seconds_r = dt * 6;
+  float minutes_r = dt * 1/10;
+  float hour_r = dt * 1/600;
+
+  hour_M = glm::rotate(hour_M, glm::radians(hour_r), glm::vec3(0,0,-1));
+  minutes_M = glm::rotate(minutes_M, glm::radians(minutes_r), glm::vec3(0,0,-1));
+  seconds_M = glm::rotate(seconds_M, glm::radians(seconds_r), glm::vec3(0,0,-1));
 }
 
 int main ()
@@ -124,8 +185,19 @@ int main ()
 
   initialize();
 
+  std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
+  float delta_time = 0.0f;
+
   while(!glfwWindowShouldClose(win)) {
-    //idle(win);
+    std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+
+    std::chrono::duration<float> time_elapsed = now - t0;
+
+    delta_time = time_elapsed.count();
+
+    t0 = now;
+
+    update(delta_time);
     display(win);
     glfwSwapBuffers(win);
     glfwPollEvents();
