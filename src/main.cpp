@@ -41,6 +41,10 @@ glm::mat4 hour_M;
 glm::mat4 minutes_M;
 glm::mat4 seconds_M;
 
+float seconds_r;
+float minutes_r;
+float hour_r;
+
 static void error (int code, const char* msg)
 {
   printf("GLFW error %d: %s\n", code, msg);
@@ -80,21 +84,21 @@ static void initialize ()
   int h, m, s;
   get_current_time(h, m, s);
 
-  float s_r = s * 6.0f;
-  float m_r = m * 6.0f + s_r/60;
-  float h_r = h%12 * 30 + m_r/60 + s_r/3600;
+  seconds_r = s * 6.0f;
+  minutes_r = m * 6.0f + seconds_r/60;
+  hour_r = h%12 * 30 + minutes_r/60 + seconds_r/3600;
 
   hour_M = glm::mat4(0.1f);
-  hour_M = glm::scale(hour_M, glm::vec3(1.0f, 1.8f, 1.0f));
-  hour_M = glm::rotate(hour_M, glm::radians(h_r), glm::vec3(0,0,-1));
+  hour_M = glm::rotate(hour_M, glm::radians(hour_r), glm::vec3(0,0,-1));
+  hour_M = glm::scale(hour_M, glm::vec3(1.0f, 0.9f, 1.0f));
 
   minutes_M = glm::mat4(0.1f);
-  minutes_M = glm::scale(minutes_M, glm::vec3(0.8f, 1.0f, 1.0f));
-  minutes_M = glm::rotate(minutes_M, glm::radians(m_r), glm::vec3(0,0,-1));
+  minutes_M = glm::rotate(minutes_M, glm::radians(minutes_r), glm::vec3(0,0,-1));
+  minutes_M = glm::scale(minutes_M, glm::vec3(0.8f, 1.3f, 1.0f));
 
   seconds_M = glm::mat4(0.1f);
+  seconds_M = glm::rotate(seconds_M, glm::radians(seconds_r), glm::vec3(0,0,-1));
   seconds_M = glm::scale(seconds_M, glm::vec3(0.3f, 1.0f, 1.0f));
-  seconds_M = glm::rotate(seconds_M, glm::radians(s_r), glm::vec3(0,0,-1));
 
   glClearColor(0.0f,1.0f,1.0f,0.6f);
 
@@ -140,14 +144,21 @@ static void display (GLFWwindow* win)
 }
 
 void update (float dt){
+  seconds_r = seconds_r + dt * 6;
+  minutes_r = minutes_r + dt * 1/10;
+  hour_r = hour_r + dt * 1/600;
 
-  float seconds_r = dt * 6;
-  float minutes_r = dt * 1/10;
-  float hour_r = dt * 1/600;
-
+  hour_M = glm::mat4(0.1f);
   hour_M = glm::rotate(hour_M, glm::radians(hour_r), glm::vec3(0,0,-1));
+  hour_M = glm::scale(hour_M, glm::vec3(1.0f, 0.9f, 1.0f));
+
+  minutes_M = glm::mat4(0.1f);
   minutes_M = glm::rotate(minutes_M, glm::radians(minutes_r), glm::vec3(0,0,-1));
+  minutes_M = glm::scale(minutes_M, glm::vec3(0.8f, 1.3f, 1.0f));
+
+  seconds_M = glm::mat4(0.1f);
   seconds_M = glm::rotate(seconds_M, glm::radians(seconds_r), glm::vec3(0,0,-1));
+  seconds_M = glm::scale(seconds_M, glm::vec3(0.3f, 1.0f, 1.0f));
 }
 
 int main ()
