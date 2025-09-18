@@ -3,7 +3,7 @@
 layout (location=0) in vec4 vertex;
 uniform vec4 icolor;
 
-out Data{
+out Data {
   vec4 color;
 } v;
 

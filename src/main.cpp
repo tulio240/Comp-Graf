@@ -17,12 +17,18 @@
 #include "error.h"
 #include "shader.h"
 #include "circle.h"
+#include "ponteiro.h"
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <glm/ext/matrix_transform.hpp>
 
 static CirclePtr relogio;
 static ShaderPtr shd;
+static PonteiroPtr ponteiro;
+
+static glm::vec4 relogio_color;
+static glm::vec4 ponteiro_color;
 
 static void error (int code, const char* msg)
 {
@@ -44,10 +50,12 @@ static void resize (GLFWwindow* win, int width, int height)
 
 static void initialize ()
 {
-  
+  relogio_color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+  ponteiro_color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 
-  glClearColor(0.0f,1.0f,1.0f,1.0f);
+  glClearColor(0.0f,1.0f,1.0f,0.6f);
   relogio = Circle::Make(60);
+  ponteiro = Ponteiro::Make();
   shd = Shader::Make();
   
   shd->AttachVertexShader("shaders/vertex.glsl");
@@ -62,10 +70,22 @@ static void display (GLFWwindow* win)
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   shd->UseProgram();
 
-  glm::vec4 color = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
-  shd->SetUniform("icolor", color);
+  glm::mat4 matrix(1.0f);
+
+  glm::mat4 M(1.0f);
+  M = glm::rotate(M, glm::radians(60.0f), glm::vec3(0, 0, 1));
+
+  shd->SetUniform("icolor", {relogio_color});
+  shd->SetUniform("M", matrix);
 
   relogio->Draw();
+
+  shd->SetUniform("icolor", {ponteiro_color});
+  
+  shd->SetUniform("M", M);
+
+  ponteiro->Draw();
+
   Error::Check("display");
 }
 

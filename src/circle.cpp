@@ -34,7 +34,7 @@ Circle::Circle(int num_points){
     for (int i = 0; i < num_points; i++){
         double teta = 2*M_PI*i/num_points;
 
-        std::cout << "Teta" << teta << std::endl;
+        // std::cout << "Teta" << teta << std::endl;
 
         double xi = x0 + radius * std::cos(teta);
         float yi = y0 + radius * std::sin(teta);
@@ -57,7 +57,7 @@ Circle::Circle(int num_points){
         indexes.push_back(i + 1);
         indexes.push_back(next);
 
-        std::cout << "i : " << i << std::endl;
+        // std::cout << "i : " << i << std::endl;
         // std::cout << "Triangulo: " << indexes[actual] << indexes[actual + 1] << indexes[actual + 2] << std::endl;
         // std::cout << "======================================" << std::endl;            
     }

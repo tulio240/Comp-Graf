@@ -1,4 +1,6 @@
 #include <memory>
+#include <glm/glm.hpp>
+
 class Ponteiro;
 using PonteiroPtr = std::shared_ptr<Ponteiro>;
 
@@ -11,12 +13,15 @@ class Ponteiro : public Shape{
     unsigned int m_vao;
     unsigned int m_ebo;
 
-    unsigned int color;
+    glm::vec4 color;
+    glm::mat4 scale;
+    glm::mat4 rotation;
+
 protected:
-    Ponteiro (int num_points);
+    Ponteiro ();
 
 public:
-    static PonteiroPtr Make (int num_points);
+    static PonteiroPtr Make ();
     virtual ~Ponteiro ();
     virtual void Draw ();
 };

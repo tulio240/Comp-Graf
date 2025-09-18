@@ -1,9 +1,12 @@
 #version 410
 
-in vec4 color;
+in Data {
+    vec4 color;
+} v;
+
 out vec4 fcolor;
 
 void main (void)
 {
-  fcolor = color;
+  fcolor = v.color;
 }
