@@ -23,7 +23,7 @@ protected:
 public:
     static PonteiroPtr Make ();
     virtual ~Ponteiro ();
-    virtual void Draw ();
+    virtual void Draw (StatePtr st = {});
 };
 
 #endif

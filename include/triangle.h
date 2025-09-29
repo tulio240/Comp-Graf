@@ -14,6 +14,6 @@ protected:
 public:
   static TrianglePtr Make ();
   virtual ~Triangle ();
-  virtual void Draw ();
+  virtual void Draw (StatePtr st);
 };
 #endif

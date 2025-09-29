@@ -2,35 +2,60 @@ set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 file(GLOB_RECURSE SOURCES ${SRC_DIR}/*.cpp)
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+list(REMOVE_ITEM SOURCES
+    ${SRC_DIR}/clock.cpp
+    ${SRC_DIR}/main_2d.cpp
+    ${SRC_DIR}/main_3d.cpp
+    ${SRC_DIR}/main_gpgpu.cpp
+)
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${SRC_DIR})
-target_include_directories(${PROJECT_NAME} PRIVATE ../include)
-
-# External dependencies includes
-target_include_directories(${PROJECT_NAME} PRIVATE
-    ${GLAD_ROOT_DIR}/include
+set(INCLUDE_LIBS ${GLAD_ROOT_DIR}/include
     ${GLFW_ROOT_DIR}/include
     ${GLM_ROOT_DIR}/include
-)
+    ${STB_ROOT_DIR}/include
+    )
 
-# External dependencies libs
-target_link_libraries(${PROJECT_NAME} PRIVATE
-    glad
-    glfw
-    glm
-)
+set(LINK_LIBS glad 
+              glfw 
+              glm 
+              stb
+    )
 
-add_custom_command(
-    TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${CMAKE_SOURCE_DIR}/shaders
-            $<TARGET_FILE_DIR:${PROJECT_NAME}>/shaders
-)
+# ---- Executável 1: clock ----
+add_executable(clock ${SOURCES} ${SRC_DIR}/clock.cpp)
+target_include_directories(clock PRIVATE ${PROJECT_INCLUDES} ${INCLUDE_LIBS})
+target_link_libraries(clock PRIVATE ${LINK_LIBS})
+target_include_directories(clock PRIVATE ../include)
 
-add_custom_command(
-    TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${CMAKE_SOURCE_DIR}/include
-            $<TARGET_FILE_DIR:${PROJECT_NAME}>/include
-)
+# ---- Executável 2: main_2d ----
+add_executable(main_2d ${SOURCES} ${SRC_DIR}/main_2d.cpp)
+target_include_directories(main_2d PRIVATE ${PROJECT_INCLUDES} ${INCLUDE_LIBS})
+target_link_libraries(main_2d PRIVATE ${LINK_LIBS})
+target_include_directories(main_2d PRIVATE ../include)
+
+# ---- Executável 3: main_3d ----
+add_executable(main_3d ${SOURCES} ${SRC_DIR}/main_3d.cpp)
+target_include_directories(main_3d PRIVATE ${PROJECT_INCLUDES} ${INCLUDE_LIBS})
+target_link_libraries(main_3d PRIVATE ${LINK_LIBS})
+target_include_directories(main_3d PRIVATE ../include)
+
+add_executable(main_gpgpu ${SOURCES} ${SRC_DIR}/main_gpgpu.cpp)
+target_include_directories(main_gpgpu PRIVATE ${PROJECT_INCLUDES} ${INCLUDE_LIBS})
+target_link_libraries(main_gpgpu PRIVATE ${LINK_LIBS})
+target_include_directories(main_gpgpu PRIVATE ../include)
+
+foreach(exec clock main_2d main_3d main_gpgpu)
+    add_custom_command(
+        TARGET ${exec} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+                ${CMAKE_SOURCE_DIR}/shaders
+                $<TARGET_FILE_DIR:${exec}>/shaders
+    )
+
+    add_custom_command(
+        TARGET ${exec} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+                ${CMAKE_SOURCE_DIR}/include
+                $<TARGET_FILE_DIR:${exec}>/include
+    )
+endforeach()

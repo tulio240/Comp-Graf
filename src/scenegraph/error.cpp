@@ -1,7 +1,8 @@
 #include "error.h"
 #ifdef _WIN32
+//#define GLAD_GL_IMPLEMENTATION // Necessary for headeronly version.
 #include <glad/glad.h>
-#else
+#elif __APPLE__
 #include <OpenGL/gl3.h>
 #endif
 #include <iostream>

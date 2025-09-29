@@ -64,7 +64,7 @@ Poligonal::~Poligonal ()
 {
 }
 
-void Poligonal::Draw ()
+void Poligonal::Draw (StatePtr st)
 {
   glBindVertexArray(m_vao);
   glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);

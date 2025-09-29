@@ -17,7 +17,7 @@ protected:
 public:
     static CirclePtr Make (int num_points);
     virtual ~Circle ();
-    virtual void Draw ();
+    virtual void Draw (StatePtr st = {});
 };
 
 #endif

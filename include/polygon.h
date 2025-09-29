@@ -16,7 +16,7 @@ protected:
 public:
     static PoligonalPtr Make ();
     virtual ~Poligonal ();
-    virtual void Draw ();
+    virtual void Draw (StatePtr st) override;
 };
 
 #endif

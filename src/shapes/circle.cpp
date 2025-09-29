@@ -99,7 +99,7 @@ Circle::~Circle ()
 {
 }
 
-void Circle::Draw ()
+void Circle::Draw (StatePtr st)
 {
   glBindVertexArray(m_vao);
   glDrawElements(GL_TRIANGLES, this->num_points * 3, GL_UNSIGNED_INT, 0);
