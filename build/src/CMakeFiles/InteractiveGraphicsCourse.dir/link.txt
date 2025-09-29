@@ -1,3 +1,0 @@
-"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\InteractiveGraphicsCourse.dir/objects.a
-C:\msys64\ucrt64\bin\ar.exe qc CMakeFiles\InteractiveGraphicsCourse.dir/objects.a @CMakeFiles\InteractiveGraphicsCourse.dir\objects1.rsp
-C:\msys64\ucrt64\bin\g++.exe -g -g -O0 -Wall -Werror -D_CRT_SECURE_NO_WARNINGS -DDEBUG -Wl,--whole-archive CMakeFiles\InteractiveGraphicsCourse.dir/objects.a -Wl,--no-whole-archive -o ..\bin\Debug\InteractiveGraphicsCourse\InteractiveGraphicsCourse.exe -Wl,--out-implib,..\bin\Debug\lib\libInteractiveGraphicsCourse.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\InteractiveGraphicsCourse.dir\linkLibs.rsp

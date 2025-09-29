@@ -17,6 +17,8 @@
 #include "quad.h"
 #include "triangle.h"
 
+#include "circle.h"
+
 #include <iostream>
 
 static ScenePtr scene;
@@ -24,10 +26,6 @@ static CameraPtr camera;
 
 class MovePointer;
 using MovePointerPtr = std::shared_ptr<MovePointer>;
-
-class MoveBody;
-using MoveBodyPtr = std::shared_ptr<MoveBody>;
-
 class MovePointer : public Engine 
 {
   TransformPtr m_trf;
@@ -46,6 +44,9 @@ public:
     m_trf->Rotate(-dt/30.0f*180.0f,0,0,1);
   }
 };
+
+class MoveBody;
+using MoveBodyPtr = std::shared_ptr<MoveBody>;
 
 class MoveBody : public Engine{
   TransformPtr m_trf;
@@ -67,13 +68,26 @@ class MoveBody : public Engine{
 
 static void initialize (void)
 {
-  // set background color: white 
-  glClearColor(0.8f,1.0f,1.0f,1.0f);
+  // set background color: black 
+  glClearColor(1.0f,1.0f,1.0f,1.0f);
   // enable depth test 
   glEnable(GL_DEPTH_TEST);
 
   // create objects
   camera = Camera2D::Make(0,10,0,10);
+
+  auto trfTerra = Transform::Make();
+  trfTerra->Translate(9.0f, 9.0f, 1.0f);
+  trfTerra->Scale(4.0f, 4.0f, 1.0f);
+
+  auto terra = Node::Make(trfTerra, {Color::Make(0, 0, 1)}, {Circle::Make(60)});
+
+  auto trfSol = Transform::Make();
+  trfSol->Scale(6.0f, 6.0f, 1.0f);
+
+  auto sol = Node::Make({Node::Make(trfSol, {Color::Make(1, 1, 0)}, {Circle::Make(60)})});
+
+  
 
   auto trf1 = Transform::Make();
   trf1->Translate(3.0f,3.0f,-0.5f);
