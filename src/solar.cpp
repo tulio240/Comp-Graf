@@ -69,45 +69,44 @@ class MoveBody : public Engine{
 static void initialize (void)
 {
   // set background color: black 
-  glClearColor(1.0f,1.0f,1.0f,1.0f);
+  glClearColor(0.0f,0.0f,0.0f,0.0f);
   // enable depth test 
   glEnable(GL_DEPTH_TEST);
 
   // create objects
   camera = Camera2D::Make(0,10,0,10);
 
+  auto trfSol = Transform::Make();
+  trfSol->LoadIdentity();
+  trfSol->Translate(5.0f, 5.0f, 1.0f);
+  trfSol->Scale(3.0f, 3.0f, 1.0f);
+
+  auto sol = Node::Make(trfSol, {Color::Make(1, 1, 0)}, {Circle::Make(60)});
+
   auto trfTerra = Transform::Make();
-  trfTerra->Translate(9.0f, 9.0f, 1.0f);
-  trfTerra->Scale(4.0f, 4.0f, 1.0f);
+  trfTerra->Translate(1.0f, 1.0f, 0.0f);
+  trfTerra->Scale(0.4f, 0.4f, 1.0f);
 
   auto terra = Node::Make(trfTerra, {Color::Make(0, 0, 1)}, {Circle::Make(60)});
+  sol->AddNode(terra);
 
-  auto trfSol = Transform::Make();
-  trfSol->Scale(6.0f, 6.0f, 1.0f);
+  auto trfLua = Transform::Make();
+  trfLua->Translate(1.0f, 1.0f, 0.0f);
+  trfLua->Scale(0.3f, 0.3f, 0.1f);
 
-  auto sol = Node::Make({Node::Make(trfSol, {Color::Make(1, 1, 0)}, {Circle::Make(60)})});
-
-  
-
-  auto trf1 = Transform::Make();
-  trf1->Translate(3.0f,3.0f,-0.5f);
-  trf1->Scale(4.0f,4.0f,1.0f);
-  auto face = Node::Make(trf1,{Color::Make(1,1,1)},{Quad::Make()});
-  auto trf2 = Transform::Make();
-  trf2->Translate(5.0f,5.0f,0.0f);
-  auto trf3 = Transform::Make();
-  trf3->Scale(0.1f,2.0f,1.0f);
-  auto pointer = Node::Make(trf2,{Node::Make(trf3,{Color::Make(1,0,0)},{Triangle::Make()})});
+  auto lua = Node::Make(trfLua, {Color::Make(128, 128, 128)}, {Circle::Make(60)});
+  terra->AddNode(lua);
 
   auto shader = Shader::Make();
-  shader->AttachVertexShader("git shaders/2d/vertex.glsl");
+  shader->AttachVertexShader("shaders/2d/vertex.glsl");
   shader->AttachFragmentShader("shaders/2d/fragment.glsl");
   shader->Link();
 
   // build scene
-  auto root = Node::Make(shader, {face,pointer});
+  auto root = Node::Make(shader, {sol});
   scene = Scene::Make(root);
-  scene->AddEngine(MovePointer::Make(trf2));
+  scene->AddEngine(MoveBody::Make(trfSol));
+  scene->AddEngine(MoveBody::Make(trfTerra));
 }
 
 static void display (GLFWwindow* win)
