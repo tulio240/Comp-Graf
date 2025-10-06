@@ -10,6 +10,7 @@
 #include <OpenGL/gl3.h>
 #endif
 # define M_PI           3.14159265358979323846  /* pi */
+
 CirclePtr Circle::Make(int num_points){
     return CirclePtr(new Circle(num_points));
 }
@@ -34,19 +35,12 @@ Circle::Circle(int num_points){
     for (int i = 0; i < num_points; i++){
         double teta = 2*M_PI*i/num_points;
 
-        // std::cout << "Teta" << teta << std::endl;
-
         double xi = x0 + radius * std::cos(teta);
         float yi = y0 + radius * std::sin(teta);
-
-        // std::cout << "xi" << xi << std::endl;
-        // std::cout << "yi" << yi << std::endl << '\n';
 
         coords.push_back(xi);
         coords.push_back(yi);
 
-
-        //int actual = i * 3;
         int next = i + 2;
 
         if (next > num_points){
@@ -55,20 +49,8 @@ Circle::Circle(int num_points){
 
         indexes.push_back(0);
         indexes.push_back(i + 1);
-        indexes.push_back(next);
-
-        // std::cout << "i : " << i << std::endl;
-        // std::cout << "Triangulo: " << indexes[actual] << indexes[actual + 1] << indexes[actual + 2] << std::endl;
-        // std::cout << "======================================" << std::endl;            
+        indexes.push_back(next);            
     }
-
-    // unsigned char color[] = {
-    //     255, 0, 0,
-    //     0, 0, 255,
-    //     0, 255, 0,
-    //     255, 255, 0,
-    //     0, 255, 255
-    // };
 
     //Create VAO
     glGenVertexArrays(1, &m_vao);
@@ -82,11 +64,6 @@ Circle::Circle(int num_points){
     glBufferData(GL_ARRAY_BUFFER, coords.size() * sizeof(float), coords.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(0,2,GL_FLOAT, GL_FALSE,0,0); //COORD
     glEnableVertexAttribArray(0);
-
-    // glBindBuffer(GL_ARRAY_BUFFER,id[1]);
-    // glBufferData(GL_ARRAY_BUFFER,sizeof(color),color,GL_STATIC_DRAW);
-    // glVertexAttribPointer(1,3,GL_UNSIGNED_BYTE,GL_TRUE,0,0);  // color
-    // glEnableVertexAttribArray(1);
 
     //Create EBO
     glGenBuffers(1, &m_ebo);

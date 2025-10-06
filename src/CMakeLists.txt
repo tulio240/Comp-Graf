@@ -64,4 +64,11 @@ foreach(exec clock main_2d main_3d main_gpgpu solar)
                 ${CMAKE_SOURCE_DIR}/include
                 $<TARGET_FILE_DIR:${exec}>/include
     )
+
+    add_custom_command(
+        TARGET ${exec} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+                ${CMAKE_SOURCE_DIR}/images
+                $<TARGET_FILE_DIR:${exec}>/images
+    )
 endforeach()
