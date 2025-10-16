@@ -8,6 +8,7 @@ list(REMOVE_ITEM SOURCES
     ${SRC_DIR}/main_3d.cpp
     ${SRC_DIR}/main_gpgpu.cpp
     ${SRC_DIR}/solar.cpp
+    ${SRC_DIR}/scene_3d.cpp
 )
 
 set(INCLUDE_LIBS ${GLAD_ROOT_DIR}/include
@@ -22,35 +23,14 @@ set(LINK_LIBS glad
               stb
     )
 
-# ---- Executável 1: clock ----
-add_executable(clock ${SOURCES} ${SRC_DIR}/clock.cpp)
-target_include_directories(clock PRIVATE ${PROJECT_INCLUDES} ${INCLUDE_LIBS})
-target_link_libraries(clock PRIVATE ${LINK_LIBS})
-target_include_directories(clock PRIVATE ../include)
+foreach(exec clock main_2d main_3d main_gpgpu solar scene_3d)
+    string(CONCAT CPP_STRING "${exec}" ".cpp")
 
-# ---- Executável 2: main_2d ----
-add_executable(main_2d ${SOURCES} ${SRC_DIR}/main_2d.cpp)
-target_include_directories(main_2d PRIVATE ${PROJECT_INCLUDES} ${INCLUDE_LIBS})
-target_link_libraries(main_2d PRIVATE ${LINK_LIBS})
-target_include_directories(main_2d PRIVATE ../include)
+    add_executable(${exec} ${SOURCES} ${SRC_DIR}/${CPP_STRING})
+    target_include_directories(${exec} PRIVATE ${PROJECT_INCLUDES} ${INCLUDE_LIBS})
+    target_link_libraries(${exec} PRIVATE ${LINK_LIBS})
+    target_include_directories(${exec} PRIVATE ../include)
 
-# ---- Executável 3: main_3d ----
-add_executable(main_3d ${SOURCES} ${SRC_DIR}/main_3d.cpp)
-target_include_directories(main_3d PRIVATE ${PROJECT_INCLUDES} ${INCLUDE_LIBS})
-target_link_libraries(main_3d PRIVATE ${LINK_LIBS})
-target_include_directories(main_3d PRIVATE ../include)
-
-add_executable(main_gpgpu ${SOURCES} ${SRC_DIR}/main_gpgpu.cpp)
-target_include_directories(main_gpgpu PRIVATE ${PROJECT_INCLUDES} ${INCLUDE_LIBS})
-target_link_libraries(main_gpgpu PRIVATE ${LINK_LIBS})
-target_include_directories(main_gpgpu PRIVATE ../include)
-
-add_executable(solar ${SOURCES} ${SRC_DIR}/solar.cpp)
-target_include_directories(solar PRIVATE ${PROJECT_INCLUDES} ${INCLUDE_LIBS})
-target_link_libraries(solar PRIVATE ${LINK_LIBS})
-target_include_directories(solar PRIVATE ../include)
-
-foreach(exec clock main_2d main_3d main_gpgpu solar)
     add_custom_command(
         TARGET ${exec} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
