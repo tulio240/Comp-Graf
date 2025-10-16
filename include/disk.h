@@ -9,11 +9,12 @@ using DiskPtr = std::shared_ptr<Disk>;
 
 class Disk : public Shape {
   unsigned int m_vao;
-  int m_nslice;
+  unsigned int m_ebo;
+  unsigned int num_points;
 protected:
-  Disk (int nslice);
+  Disk (int num_points);
 public:
-  static DiskPtr Make (int nslice=64);
+  static DiskPtr Make (int num_points=64);
   virtual ~Disk ();
   virtual void Draw (StatePtr st);
 };

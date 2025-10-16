@@ -46,7 +46,7 @@ static void initialize (void)
   arcball = camera->CreateArcball();
 
   //LightPtr light = ObjLight::Make(viewer_pos[0],viewer_pos[1],viewer_pos[2]);
-  LightPtr light = Light::Make(viewer_pos[0],viewer_pos[1],viewer_pos[2],1.0f,"camera");
+  LightPtr light = Light::Make(-2.2f,0.5f,2.0f,0.2f,"camera");
 
   AppearancePtr white = Material::Make(1.0f,1.0f,1.0f);
   AppearancePtr green = Material::Make(0.53f, 0.9f, 0.53f);
@@ -54,12 +54,12 @@ static void initialize (void)
   AppearancePtr beige = Material::Make(0.85f, 0.73f, 0.6f);
 
   TransformPtr trf_sph1 = Transform::Make();
-  trf_sph1->Translate(1.2f, 0.2f, 1.2f);
+  trf_sph1->Translate(0.0f, 0.3f, 0.0f);
   trf_sph1->Scale(0.3f, 0.3f, 0.3f);
 
   TransformPtr trf_sph2 = Transform::Make();
   
-  trf_sph2->Translate(1.2f, 0.2f, 1.2f);
+  trf_sph2->Translate(1.2f, 0.2f, -1.2f);
   trf_sph2->Scale(0.5f, 0.5f, 0.5f);
 
   TransformPtr trf_cb1 = Transform::Make();
@@ -94,9 +94,9 @@ static void initialize (void)
   NodePtr root = Node::Make(shader, 
     {
         Node::Make(trf_sph1, {green}, {sphere}),
-        // Node::Make(trf_sph2, {red}, {sphere}),
-        // Node::Make(trf_cb1, {beige}, {cube}), 
-        // Node::Make(trf_cb2, {white}, {cube})
+        Node::Make(trf_sph2, {red}, {sphere}),
+        Node::Make(trf_cb1, {beige}, {cube}), 
+        Node::Make(trf_cb2, {white}, {cube})
     }
   );
 
