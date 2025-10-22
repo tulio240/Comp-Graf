@@ -22,6 +22,7 @@
 #include "light.h"
 #include "light.h"
 #include "polyoffset.h"
+#include "cylinder.h"
 
 #include <iostream>
 #include <cassert>
@@ -52,6 +53,9 @@ static void initialize (void)
   AppearancePtr green = Material::Make(0.53f, 0.9f, 0.53f);
   AppearancePtr red = Material::Make(1.0f,0.5f,0.5f);
   AppearancePtr beige = Material::Make(0.85f, 0.73f, 0.6f);
+  AppearancePtr earth = Texture::Make("decal", "images/earth.jpg");
+  AppearancePtr wood = Texture::Make("decal","images/chao_vo.jpg");
+  AppearancePtr poff = PolygonOffset::Make(-10,-10);
 
   TransformPtr trf_sph1 = Transform::Make();
   trf_sph1->Translate(0.0f, 0.3f, 0.0f);
@@ -76,6 +80,8 @@ static void initialize (void)
   ShapePtr cube = Cube::Make();
   Error::Check("before sphere");
   ShapePtr sphere = Sphere::Make();
+  Error::Check("before cylinder");
+  ShapePtr cylinder = Cylinder::Make();
   Error::Check("after shps");
 
   // create shader
@@ -91,12 +97,14 @@ static void initialize (void)
   shd_tex->AttachFragmentShader("shaders/ilum_vert/fragment_texture.glsl");
   shd_tex->Link();
 
-  NodePtr root = Node::Make(shader, 
+  NodePtr root = Node::Make(shd_tex, 
     {
-        Node::Make(trf_sph1, {green}, {sphere}),
-        Node::Make(trf_sph2, {red}, {sphere}),
-        Node::Make(trf_cb1, {beige}, {cube}), 
-        Node::Make(trf_cb2, {white}, {cube})
+        // Node::Make(trf_sph1, {green}, {sphere}),
+        // Node::Make(trf_sph2, {red}, {sphere}),
+        // Node::Make(trf_cb1, {beige}, {cube}), 
+        // Node::Make(trf_cb2, {white}, {cube}),
+        Node::Make(trf_sph1, {white, poff, wood}, {cylinder}),
+        Node::Make(trf_sph2, {white, poff, earth}, {sphere})
     }
   );
 

@@ -16,6 +16,6 @@ protected:
 public:
   static DiskPtr Make (int num_points=64);
   virtual ~Disk ();
-  virtual void Draw (StatePtr st);
+  virtual void Draw (StatePtr st = {});
 };
 #endif
